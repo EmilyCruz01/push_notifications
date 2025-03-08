@@ -15,35 +15,56 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeCompilerApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.push.login.presentation.LoginViewModel
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun NewNoteUI(){
+fun NewNoteUI(
+    newNoteViewModel: NewNoteViewModel = viewModel(),
+    loginViewModel: LoginViewModel = viewModel()
+) {
+    val noteContent by newNoteViewModel.noteContent.observeAsState("")
+    val userId = loginViewModel.userId.observeAsState(-1).value ?: -1
+
+
     Column(
         modifier = Modifier
-            .background(Color(235,235,235))
+            .background(Color(235, 235, 235))
             .padding(30.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-    OutlinedTextField(
-        value = "",
-        onValueChange = {},
-        placeholder = { Text("Express yourself...", fontWeight = FontWeight.SemiBold, color = Color.Gray) },
-        modifier = Modifier.fillMaxWidth()
+        OutlinedTextField(
+            value = noteContent,
+            onValueChange = { newNoteViewModel.onContentChange(it) },
+            placeholder = {
+                Text(
+                    "Express yourself...",
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Gray
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-    )
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = {
-                //navigateToNewNote()
+               // newNoteViewModel.viewModelScope.launch {
+                //    newNoteViewModel.onSubmit(userId)
+              //  }
             },
             modifier = Modifier
                 .fillMaxWidth(),

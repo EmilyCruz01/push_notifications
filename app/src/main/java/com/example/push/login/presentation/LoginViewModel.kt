@@ -14,6 +14,9 @@ class LoginViewModel(private val loginUseCase: LoginUseCase, private val navigat
     private val _email = MutableLiveData("")
     val email: LiveData<String> get() = _email
 
+    private val _userId = MutableLiveData("")
+    val userId: LiveData<String> get() = _userId
+
     private val _password = MutableLiveData("")
     val password: LiveData<String> get() = _password
 
